@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgamm4Param.R
 \name{vgamm4Param}
 \alias{vgamm4Param}
-\title{Run a Generalized Additive Mixed Effects Model on all voxels of a NIfTI image within a mask and and return parametric and smooth coefficients tables}
+\title{Run a Generalized Additive Mixed Effects Model on all voxels of a NIfTI image and return parametric and smooth coefficients}
 \usage{
 vgamm4Param(image, mask, fourdOut = NULL, formula, randomFormula, subjData,
   mc.preschedule = TRUE, ncores = 1, ...)
@@ -46,4 +46,4 @@ models <- vgamm4Param(image, mask, formula = fm1,
                  randomFormula = randomFormula, subjData = covs, ncores = 1, REML=TRUE)
 
 }
-
+\keyword{internal}

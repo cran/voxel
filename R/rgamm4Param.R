@@ -1,4 +1,4 @@
-#' Run a Generalized Additive Mixed Effects Model on all voxels of a NIfTI image and return parametric and smooth coefficients
+#' Run a Generalized Additive Mixed Effects Model on all voxels of a NIfTI image return coefficients and residuals
 #' 
 #' This function is able to run a Generalized Mixed Effects Model (GAMM) using the gamm4() function. 
 #' The analysis will run in all voxels in in the mask and will return parametric and smooth coefficients.
@@ -27,13 +27,13 @@
 #' covs <- data.frame(x = runif(25), y = runif(25), id = rep(1:5,5))
 #' fm1 <- "~ s(x) + s(y)"
 #' randomFormula <- "~(1|id)"
-#' models <- vgamm4Param(image, mask, formula = fm1, 
+#' models <- rgamm4Param(image, mask, formula = fm1, 
 #'                  randomFormula = randomFormula, subjData = covs, ncores = 1, REML=TRUE)
 #' 
 
 
 
-vgamm4Param <- function(image, mask , fourdOut = NULL, formula, randomFormula, subjData, mc.preschedule = TRUE, ncores =1, ...) {  
+rgamm4Param <- function(image, mask , fourdOut = NULL, formula, randomFormula, subjData, mc.preschedule = TRUE, ncores =1, ...) {  
   
   
   
@@ -85,8 +85,10 @@ vgamm4Param <- function(image, mask , fourdOut = NULL, formula, randomFormula, s
   print("Running parallel models")
   model <- parallel::mclapply(m, 
                               FUN = function(x, data, random,  ...) {
-                                foo <- mgcv::summary.gam(gamm4::gamm4(x, data=data, random=random, ...)$gam)
-                                return(list(par.coeff = foo$p.table, smooth.coeff = foo$s.table))
+                                foo <- gamm4::gamm4(x, data=data, random=random, ...)$gam
+                                foo2 <- foo$residuals
+                                foo <- mgcv::summary.gam(foo)
+                                return(list(list(par.coeff = foo$p.table, smooth.coeff = foo$s.table), foo2))
                               }, data=imageMat,random=random, ..., mc.preschedule = mc.preschedule, mc.cores = ncores)
   
   timeOut <- proc.time() - timeIn

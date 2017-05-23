@@ -2,11 +2,11 @@
 % Please edit documentation in R/lmerNIfTI.R
 \name{lmerNIfTI}
 \alias{lmerNIfTI}
-\title{Run a Linear Mixed Effet Model on a NIfTI image and output a parametric maps}
+\title{Run a Linear Mixed Effects Model on a NIfTI image and output a parametric maps}
 \usage{
 lmerNIfTI(image, mask, fourdOut = NULL, formula, subjData,
-  mc.preschedule = TRUE, ncores = 1, method = "none", outDir = NULL,
-  ...)
+  mc.preschedule = TRUE, ncores = 1, method = "none", residual = FALSE,
+  outDir = NULL, ...)
 }
 \arguments{
 \item{image}{Input image of type 'nifti' or vector of path(s) to images. If multiple paths, the script will call mergeNifti() and merge across time.}
@@ -24,6 +24,8 @@ lmerNIfTI(image, mask, fourdOut = NULL, formula, subjData,
 \item{ncores}{Number of cores to use}
 
 \item{method}{which method of correction for multiple comparisons (default is none)}
+
+\item{residual}{If set to TRUE then residuals maps will be returned along parametric maps}
 
 \item{outDir}{Path to the folder where to output parametric maps (Default is Null, only change if you want to write maps out)}
 
@@ -48,7 +50,6 @@ mask <- oro.nifti::nifti(img = array(c(rep(0,14),1,1), dim = c(4,4,4,1)))
 set.seed(1)
 covs <- data.frame(x = runif(25), id = rep(1:5,5))
 fm1 <- "~ x + (1|id)"
-models <- lmerNIfTI(image, mask, formula = fm1, subjData = covs, method="fdr", ncores = 1)
+Maps <- lmerNIfTI(image, mask, formula = fm1, subjData = covs, method="fdr", ncores = 1)
 
 }
-

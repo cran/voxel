@@ -5,8 +5,8 @@
 \title{Wrapper to run a Generalized Additive Mixed Effects model on an Nifti and output a parametric map}
 \usage{
 gammNIfTI(image, mask, fourdOut = NULL, formula, randomFormula, subjData,
-  mc.preschedule = TRUE, ncores = 1, method = "none", outDir = NULL,
-  ...)
+  mc.preschedule = TRUE, ncores = 1, method = "none", residual = FALSE,
+  outDir = NULL, ...)
 }
 \arguments{
 \item{image}{Input image of type 'nifti' or vector of path(s) to images. If multiple paths, the script will call mergeNifti() and merge across time.}
@@ -17,7 +17,7 @@ gammNIfTI(image, mask, fourdOut = NULL, formula, randomFormula, subjData,
 
 \item{formula}{Must be a formula passed to gamm4()}
 
-\item{randomFormula}{Random effects formual passed to gamm4()}
+\item{randomFormula}{Random effects formula passed to gamm4()}
 
 \item{subjData}{Dataframe containing all the covariates used for the analysis}
 
@@ -26,6 +26,8 @@ gammNIfTI(image, mask, fourdOut = NULL, formula, randomFormula, subjData,
 \item{ncores}{Number of cores to use}
 
 \item{method}{which method of correction for multiple comparisons (default is none)}
+
+\item{residual}{If set to TRUE then residuals maps will be returned along parametric maps}
 
 \item{outDir}{Path to the folder where to output parametric maps (Default is Null, only change if you want to write maps out)}
 
@@ -49,10 +51,9 @@ set.seed(1)
 covs <- data.frame(x = runif(25), y = runif(25), id = rep(1:5,5))
 fm1 <- "~ s(x) + s(y)"
 randomFormula <- "~(1|id)"
-models <- gammNIfTI(image, mask, formula = fm1, 
+Maps <- gammNIfTI(image, mask, formula = fm1, 
                  randomFormula = randomFormula, subjData = covs, ncores = 1,
                  method="fdr", REML=TRUE)
 
 
 }
-

@@ -13,7 +13,7 @@ ts2meanCluster(image, mask)
 }
 \description{
 This function is able to output the mean voxel intensity over a cluster. 
-Each column represents a cluster and the rows represent the t-dimention.
+Each column represents a cluster and the rows represent the t-dimension.
 }
 \examples{
 
@@ -22,4 +22,4 @@ image <- oro.nifti::nifti(img = array(1:320, dim =c(4,4,4,5)))
 mask <- oro.nifti::nifti(img = array(0:15, dim = c(4,4,4,1)))
 matrix <- ts2meanCluster(image, mask)
 }
-
+\keyword{internal}
